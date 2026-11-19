@@ -11,3 +11,46 @@ datasource db {
 }
 
 // Add your models below this line
+
+model Chef {
+  id         Int        @id @default(autoincrement())
+  name       String
+  speciality String
+  town       String
+  cookbook   Cookbook[]
+}
+
+model Cookbook {
+  id            Int      @id @default(autoincrement())
+  title         String
+  publishedYear Int
+  chefId        Int
+  chef          Chef     @relation(fields: [chefId], references: [id])
+  recipe        Recipe[]
+}
+
+model Recipe {
+  id             Int          @id @default(autoincrement())
+  title          String
+  pageNumber     Int
+  cookingMinutes Int
+  cookBookId     Int
+  cookBook       Cookbook     @relation(fields: [cookBookId], references: [id])
+  nutrition      Nutrition?
+  ingredient     Ingredient[]
+}
+
+model Nutrition {
+  id        Int    @id @default(autoincrement())
+  calories  Int
+  saltGrams Int
+  recipeId  Int    @unique
+  recipe    Recipe @relation(fields: [recipeId], references: [id])
+}
+
+model Ingredient {
+  id       Int      @id @default(autoincrement())
+  name     String
+  allergen String
+  recipe   Recipe[]
+}
